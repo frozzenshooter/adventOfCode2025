@@ -4,6 +4,8 @@ import de.knoblauch.utils.FileUtil;
 
 public class Day1 {
 
+    public static final int MAX = 100;
+
     public static void execute() {
 
         var lines = FileUtil.readLines("input_day1.txt");
@@ -16,17 +18,44 @@ public class Day1 {
             var rotationType = rotationDefinition.substring(0, 1);
             var degree = rotationDefinition.substring(1);
             var degreeAsInt = Integer.parseInt(degree);
+            var rest = degreeAsInt % MAX;
 
-            //TODO: correct way of catching over or underflow
             if ("L".equalsIgnoreCase(rotationType)) {
-                currentNumber = currentNumber - degreeAsInt;
+                currentNumber = rotateLeft(currentNumber, rest);
             } else if ("R".equalsIgnoreCase(rotationType)) {
-                currentNumber = currentNumber + degreeAsInt;
+                currentNumber = rotateRight(currentNumber, rest);
             } else {
                 throw new IllegalArgumentException("The rotation was specified as '" + rotationType + "', which is not supported");
             }
-            System.out.println(currentNumber);
+
+            if (currentNumber == 0) {
+                zeroCount++;
+            }
         }
 
+        System.out.println(zeroCount);
+
+    }
+
+    private static int rotateLeft(int currentNumber, int leftRotationTicks) {
+        // 50 - 40 -> 10
+        // 40 - 50 -> -10 -> 90
+        // 0 - 1 -> 99
+        // 40 - 40 -> 0
+        var candidate = currentNumber - leftRotationTicks;
+        if (candidate < 0) {
+            return MAX + candidate;
+        } else {
+            return candidate;
+        }
+    }
+
+    private static int rotateRight(int currentNumber, int rightRotationTicks) {
+        var candidate = currentNumber + rightRotationTicks;
+        if (candidate >= MAX) {
+            return candidate - MAX;
+        } else {
+            return candidate;
+        }
     }
 }
