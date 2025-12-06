@@ -7,7 +7,8 @@ public class Main {
 
     static void main() {
 
-        Day1.execute();
+        Day1.firstPuzzle();
+        Day1.secondPuzzle();
 
     }
 }

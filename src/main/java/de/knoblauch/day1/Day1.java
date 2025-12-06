@@ -6,7 +6,7 @@ public class Day1 {
 
     public static final int MAX = 100;
 
-    public static void execute() {
+    public static void firstPuzzle() {
 
         var lines = FileUtil.readLines("input_day1.txt");
 
@@ -33,8 +33,7 @@ public class Day1 {
             }
         }
 
-        System.out.println(zeroCount);
-
+        IO.println("[Day 1][First Puzzle]: zeros '" + zeroCount + "'");
     }
 
     private static int rotateLeft(int currentNumber, int leftRotationTicks) {
@@ -57,5 +56,50 @@ public class Day1 {
         } else {
             return candidate;
         }
+    }
+
+    /**
+     * SOMETHING IS INCORRECT HERE
+     */
+    public static void secondPuzzle() {
+
+        var lines = FileUtil.readLines("input_day1.txt");
+
+        var currentNumber = 50;
+        var zeroCount = 0;
+
+        for (var rotationDefinition : lines) {
+
+            var rotationType = rotationDefinition.substring(0, 1);
+            var degree = rotationDefinition.substring(1);
+            var degreeAsInt = Integer.parseInt(degree);
+
+            var rest = degreeAsInt % MAX;
+            var directZeros = degreeAsInt / MAX;
+            zeroCount += directZeros;
+
+            if ("L".equalsIgnoreCase(rotationType)) {
+                var candidate = currentNumber - rest;
+                if (candidate < 0) {
+                    currentNumber = MAX + candidate;
+                    zeroCount++;
+                } else {
+                    currentNumber = candidate;
+                }
+            } else if ("R".equalsIgnoreCase(rotationType)) {
+                var candidate = currentNumber + rest;
+                if (candidate >= MAX) {
+                    currentNumber = candidate - MAX;
+                    zeroCount++;
+                } else {
+                    currentNumber = candidate;
+                }
+
+            } else {
+                throw new IllegalArgumentException("The rotation was specified as '" + rotationType + "', which is not supported");
+            }
+        }
+
+        IO.println("[Day 1][Second Puzzle]: zeros '" + zeroCount + "'");
     }
 }
